@@ -16,10 +16,22 @@
     <div id="popup-overlay" class="popup-overlay">
         <div class="popup-content">
             <span class="popup-close" id="popup-close">&times;</span>
-            <h3>¡Bienvenido a la Biblioteca!</h3>
-            <p>Esta es mi colección personal de juegos. Si deseas que agregue algún otro juego a la lista, no dudes en decírmelo.</p>
-            <h4>Solo toca entre la variedad de juegos, para seleccionarlos!!!</h4>
-            <p>¡Disfruta tu visita!</p>
+
+            <div class="popup-icon">
+                    <path fill="currentColor" d="M320-160h320v-80H320v80Zm0-120h320v-80H320v80ZM233-400l-73-73 51-51 73 73-51 51Zm545 0 51-51-73-73-51 51 73 73ZM480-80q-141 0-240.5-99.5T140-420q0-104 60-199t160-151v100q-88 43-124 122.5T200-420q0 117 81.5 198.5T480-140q117 0 198.5-81.5T760-420q0-94-36-173.5T600-716v-100q100 56 160 151t60 199q0 141-99.5 240.5T480-80Z"/>
+                </svg>
+            </div>
+
+            <h3>¡Bienvenido a la Biblioteca de Juegos!</h3>
+            <p class="popup-intro">Sigue estos sencillos pasos para elegir tus juegos:</p>
+
+            <ol class="popup-steps">
+                <li><strong>Explora y selecciona:</strong> Haz clic en hasta 5 juegos que te interesen.</li>
+                <li><strong>Revisa tu lista:</strong> Aparecerán a la izquierda, en tu carrito de selección o arriba del todo si esta en teléfono</li>
+                <li><strong>¡Contáctame!</strong> Cuando termines, usa el botón de WhatsApp para enviar tu lista.</li>
+            </ol>
+
+            <button class="popup-cta-btn" id="popup-cta-btn">¡Entendido!</button>
         </div>
     </div>
 
@@ -32,13 +44,12 @@
         </div>
     </div>
 
-
     <div class="main-layout">
         <aside class="selected-games-container">
             <h3>Juegos Seleccionados</h3>
             <p><strong><span id="selection-count">0</span>/5</strong> seleccionados</p>
             <ul id="selected-games-list">
-                </ul>
+            </ul>
             <div class="cart-actions">
                 <button id="add-custom-game-btn" class="custom-game-btn">Agregar otro juego</button>
                 <button id="clear-cart-btn" class="clear-cart-btn">Vaciar Carrito</button>
@@ -192,9 +203,11 @@
             // Lógica de Pop-ups
             const welcomePopup = document.getElementById('popup-overlay');
             const welcomeCloseBtn = document.getElementById('popup-close');
+            const welcomeCtaBtn = document.getElementById('popup-cta-btn'); 
             if(welcomePopup) welcomePopup.style.display = 'flex';
             const closeWelcomePopup = () => { if(welcomePopup) welcomePopup.style.display = 'none'; };
             if(welcomeCloseBtn) welcomeCloseBtn.addEventListener('click', closeWelcomePopup);
+            if(welcomeCtaBtn) welcomeCtaBtn.addEventListener('click', closeWelcomePopup);
             if(welcomePopup) welcomePopup.addEventListener('click', (event) => { if (event.target === welcomePopup) closeWelcomePopup(); });
 
             const notFoundPopup = document.getElementById('not-found-popup');
@@ -202,7 +215,6 @@
             const closeNotFoundPopup = () => { if(notFoundPopup) notFoundPopup.style.display = 'none'; };
             if(notFoundCloseBtn) notFoundCloseBtn.addEventListener('click', closeNotFoundPopup);
             if(notFoundPopup) notFoundPopup.addEventListener('click', (event) => { if (event.target === notFoundPopup) closeNotFoundPopup(); });
-
 
             // --- LÓGICA DEL CARRITO DE SELECCIÓN ---
             const maxSelection = 5;
@@ -234,7 +246,7 @@
                             card.classList.add('highlight');
                             setTimeout(() => {
                                 card.classList.remove('highlight');
-                            }, 2500); // La animación dura 2.5 segundos
+                            }, 2500);
 
                             gameFound = true;
                             break; 
@@ -244,10 +256,9 @@
                     if (!gameFound) {
                         if(notFoundPopup) notFoundPopup.style.display = 'flex';
                     }
-                    searchInput.value = ''; // Limpiar el campo de búsqueda
+                    searchInput.value = '';
                 });
             }
-
 
             const findCardByTitle = (title) => {
                 for (const card of gameCards) {

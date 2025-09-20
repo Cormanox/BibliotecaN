@@ -47,11 +47,11 @@ body {
     border-radius: 4px;
     margin-bottom: 0.5rem;
     border-left: 3px solid var(--brand-blue);
-    animation: fadeIn 0.4s ease;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
+    animation: slideInFromLeft 0.4s ease-out; /* NUEVA ANIMACIÓN */
 }
 #selected-games-list li.custom-game {
     border-left-color: var(--custom-orange);
@@ -79,6 +79,13 @@ body {
 
 /* --- BOTONES DE ACCIÓN DEL CARRITO --- */
 .cart-actions { margin-top: 1rem; display: grid; gap: 0.5rem; }
+.custom-game-btn, .clear-cart-btn, .whatsapp-btn, .search-btn, .popup-cta-btn {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s, transform 0.1s ease; /* Transición para efecto de clic */
+}
+.custom-game-btn:active, .clear-cart-btn:active, .whatsapp-btn:active, .search-btn:active, .popup-cta-btn:active {
+    transform: scale(0.97); /* Efecto de clic */
+}
+
 .custom-game-btn {
     background-color: transparent;
     color: var(--brand-blue);
@@ -89,7 +96,6 @@ body {
     font-family: var(--font-heading);
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 .custom-game-btn:hover { background-color: var(--brand-blue); color: white; }
 
@@ -103,16 +109,11 @@ body {
     font-family: var(--font-heading);
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
     display: none;
 }
-.clear-cart-btn:hover { background-color: var(--danger-red-hover); transform: scale(1.02); }
+.clear-cart-btn:hover { background-color: var(--danger-red-hover); }
 
-.whatsapp-link {
-    text-decoration: none;
-    display: none; /* Oculto por defecto, se muestra con JS */
-}
-
+.whatsapp-link { text-decoration: none; display: none; }
 .whatsapp-btn {
     background-color: var(--whatsapp-green);
     color: white;
@@ -123,26 +124,16 @@ body {
     font-family: var(--font-heading);
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
 }
-.whatsapp-btn:hover {
-    background-color: var(--whatsapp-green-hover);
-    transform: scale(1.02);
-}
-.whatsapp-btn svg {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-}
+.whatsapp-btn:hover { background-color: var(--whatsapp-green-hover); }
+.whatsapp-btn svg { width: 20px; height: 20px; fill: currentColor; }
 
 /* --- CONTENIDO PRINCIPAL Y GRID --- */
-.container { flex: 1; animation: fadeIn 0.8s ease-in-out forwards; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
+.container { flex: 1; }
 h1, h2, h3, p { text-align: center; }
 h1 { font-family: var(--font-heading); color: #FFFFFF; font-size: 3rem; margin-bottom: 0.5rem; border-bottom: 2px solid #334166; padding-bottom: 1rem; letter-spacing: 1.5px; }
 h2 {
@@ -158,12 +149,7 @@ h3 { font-family: var(--font-heading); color: #FFFFFF; margin-bottom: 1rem; font
 .container p { font-size: 1rem; color: var(--font-secondary); margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto; }
 
 /* --- ESTILOS DE BÚSQUEDA --- */
-.search-form {
-    display: flex;
-    gap: 10px;
-    max-width: 600px;
-    margin: 1.5rem auto 2.5rem auto;
-}
+.search-form { display: flex; gap: 10px; max-width: 600px; margin: 1.5rem auto 2.5rem auto; }
 .search-input {
     flex-grow: 1;
     border: 2px solid #334166;
@@ -174,11 +160,7 @@ h3 { font-family: var(--font-heading); color: #FFFFFF; margin-bottom: 1rem; font
     font-size: 1rem;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
-.search-input:focus {
-    outline: none;
-    border-color: var(--brand-blue);
-    box-shadow: 0 0 10px var(--glow-color);
-}
+.search-input:focus { outline: none; border-color: var(--brand-blue); box-shadow: 0 0 10px var(--glow-color); }
 .search-btn {
     background-color: var(--brand-blue);
     color: white;
@@ -188,36 +170,51 @@ h3 { font-family: var(--font-heading); color: #FFFFFF; margin-bottom: 1rem; font
     font-size: 1rem;
     font-family: var(--font-heading);
     cursor: pointer;
-    transition: background-color 0.3s;
 }
-.search-btn:hover {
-    background-color: #0056b3;
-}
-
+.search-btn:hover { background-color: #0056b3; }
 
 .game-grid { list-style-type: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 25px; justify-content: center; }
 .game-card { background-color: var(--card-color); border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); overflow: hidden; display: flex; flex-direction: column; text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease; cursor: pointer; border: 2px solid transparent; }
-.game-card:hover { 
-    transform: translateY(-8px); 
-    box-shadow: 0 8px 20px var(--glow-color); 
-}
-.game-card.selected { transform: translateY(-5px) scale(1.03); box-shadow: 0 0 15px var(--brand-blue), 0 0 5px var(--brand-blue); border: 2px solid var(--brand-blue); }
-.game-card img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-bottom: 1px solid #334166; margin-bottom: 15px; }
+.game-card:hover { transform: translateY(-8px); box-shadow: 0 8px 20px var(--glow-color); }
+.game-card.selected { transform: translateY(-5px) scale(1.03); border: 2px solid var(--brand-blue); animation: pulse-glow 2s infinite ease-in-out; }
+.game-card img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-bottom: 1px solid #334166; margin-bottom: 15px; transition: transform 0.4s ease; }
+.game-card:hover img { transform: scale(1.05); } /* Zoom a la imagen en hover */
 .game-card .game-title { font-size: 1rem; font-weight: 400; color: var(--font-color); padding: 0 10px 15px 10px; }
 
-/* --- ANIMACIÓN DE RESALTADO --- */
+/* --- DEFINICIÓN DE ANIMACIONES --- */
+@keyframes slideUpFadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Aplicación de animación de carga escalonada */
+h1, .search-form, .game-grid, .container > p, .container > h2 {
+    animation: slideUpFadeIn 0.7s ease-out forwards;
+    opacity: 0;
+}
+.search-form { animation-delay: 0.1s; }
+.container > p { animation-delay: 0.2s; }
+.container > h2 { animation-delay: 0.3s; }
+.game-grid { animation-delay: 0.4s; }
+
+@keyframes slideInFromLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 15px var(--brand-blue), 0 0 5px var(--brand-blue); }
+    50% { box-shadow: 0 0 25px var(--brand-blue), 0 0 10px var(--brand-blue); }
+    100% { box-shadow: 0 0 15px var(--brand-blue), 0 0 5px var(--brand-blue); }
+}
+
 @keyframes highlight-fade {
-    0%, 10% {
-        box-shadow: 0 0 25px var(--highlight-yellow), 0 0 15px var(--highlight-yellow);
-    }
-    100% {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
+    0%, 10% { box-shadow: 0 0 25px var(--highlight-yellow), 0 0 15px var(--highlight-yellow); }
+    100% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); }
 }
 .game-card.highlight {
     animation: highlight-fade 2.5s ease-out forwards;
 }
-
 
 /* --- AJUSTES RESPONSIVE --- */
 @media (max-width: 1024px) {
@@ -231,10 +228,69 @@ h3 { font-family: var(--font-heading); color: #FFFFFF; margin-bottom: 1rem; font
     .game-card .game-title { font-size: 0.8rem; padding: 0 5px 10px 5px; }
 }
 
-/* --- ESTILOS DEL POP-UP --- */
+/* --- ESTILOS DEL POP-UP MEJORADO --- */
 .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
-.popup-content { background-color: var(--card-color); padding: 2rem; border-radius: 8px; border: 1px solid #334166; text-align: center; width: 90%; max-width: 500px; position: relative; box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5); animation: fadeIn 0.5s ease-in-out forwards; }
-.popup-content h3 { font-family: var(--font-heading); color: #FFFFFF; margin-top: 0; margin-bottom: 1rem; font-size: 1.8rem; }
-.popup-content p { color: var(--font-secondary); font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; }
+.popup-content { 
+    background-color: var(--card-color); 
+    padding: 2.5rem;
+    border-radius: 8px; 
+    border: 1px solid #334166; 
+    text-align: center; 
+    width: 90%; 
+    max-width: 550px; 
+    position: relative; 
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5); 
+    animation: slideUpFadeIn 0.5s ease-out forwards;
+    border-top: 4px solid var(--brand-blue);
+}
+.popup-content h3 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+.popup-icon { margin-bottom: 1rem; color: var(--brand-blue); }
+.popup-intro {
+    color: var(--font-secondary);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.popup-steps { list-style-type: none; padding: 0; margin: 0 auto 2rem auto; text-align: left; max-width: 400px; counter-reset: steps-counter; }
+.popup-steps li {
+    position: relative;
+    padding-left: 45px;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    font-size: 1rem;
+    color: var(--font-secondary);
+}
+.popup-steps li::before {
+    counter-increment: steps-counter;
+    content: counter(steps-counter);
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background-color: var(--brand-blue);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-heading);
+}
+.popup-steps li strong { color: var(--font-color); }
+.popup-cta-btn {
+    background-color: var(--brand-blue);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 30px;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    cursor: pointer;
+}
+.popup-cta-btn:hover { background-color: #0056b3; }
 .popup-close { position: absolute; top: 10px; right: 15px; font-size: 2rem; color: var(--font-secondary); cursor: pointer; transition: color 0.3s ease; }
 .popup-close:hover { color: #FFFFFF; }
