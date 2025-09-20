@@ -13,10 +13,18 @@
 </head>
 <body>
 
+    <div id="popup-overlay" class="popup-overlay">
+        <div class="popup-content">
+            <span class="popup-close" id="popup-close">&times;</span>
+            <h3>¡Bienvenido a la Biblioteca!</h3>
+            <p>Esta es mi colección personal de juegos. Si deseas que agregue algún otro juego a la lista, no dudes en decírmelo.</p>
+            <p>¡Disfruta tu visita!</p>
+        </div>
+    </div>
     <div class="container">
-        <h1> Biblioteca de Juegos<br>Nintendo Switch Magíca</h1>
+        <h1> Biblioteca de Juegos<br>Nintendo Switch Mágica</h1>
         <p>Aquí les comparto mi colección de juegos de Nintendo Switch. ¡Espero que les guste!</p>
-        <h2>Si no encuentras algun juego que quieras dime y con gusto los descargo</h2>
+        <h2>Si no encuentras algún juego que quieras dime y con gusto los descargo</h2>
 
         <ul class="game-grid">
             <li class="game-card">
@@ -142,5 +150,30 @@
         </ul>
     </div>
 
-</body>
+
+    <script>
+        window.addEventListener('load', function() {
+            const popup = document.getElementById('popup-overlay');
+            const closeBtn = document.getElementById('popup-close');
+
+            // Muestra el pop-up
+            popup.style.display = 'flex';
+
+            // Función para cerrar el pop-up
+            const closePopup = function() {
+                popup.style.display = 'none';
+            }
+
+            // Cierra el pop-up al hacer clic en el botón de cerrar
+            closeBtn.addEventListener('click', closePopup);
+
+            // Cierra el pop-up si se hace clic fuera del contenido
+            popup.addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closePopup();
+                }
+            });
+        });
+    </script>
+    </body>
 </html>
