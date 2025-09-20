@@ -1,13 +1,13 @@
 /* --- VARIABLES DE COLOR Y FUENTES --- */
 :root {
-    --brand-red: #E60012;
-    --glow-color: rgba(230, 0, 18, 0.4);
-    --background-color: #1A1A1A;
-    --card-color: #252525;
-    --font-color: #E0E0E0;
-    --font-secondary: #A0A0A0;
-    --font-heading: 'Russo One', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --brand-blue: #007BFF;
+    --glow-color: rgba(0, 123, 255, 0.3);
+    --background-color: #12182B;
+    --card-color: #1B253F;
+    --font-color: #EAEAEA;
+    --font-secondary: #99AAB5;
+    --font-heading: 'Montserrat', sans-serif;
+    --font-body: 'Lato', sans-serif;
 }
 
 /* --- ESTILO DE SCROLLBAR Y BODY MEJORADO --- */
@@ -18,11 +18,11 @@
     background: var(--background-color);
 }
 ::-webkit-scrollbar-thumb {
-    background: #555;
+    background: #334166;
     border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--brand-red);
+    background: var(--brand-blue);
 }
 
 body {
@@ -54,21 +54,28 @@ body {
     animation: fadeIn 0.8s ease-in-out forwards;
 }
 
-/* --- TÍTULO CON GRADIENTE Y NUEVA FUENTE --- */
+/* --- TÍTULO MINIMALISTA --- */
 h1 {
     font-family: var(--font-heading);
     color: #FFFFFF;
     text-align: center;
     font-size: 3rem;
     margin-bottom: 1.5rem;
-    border-bottom: 3px solid #444;
+    border-bottom: 2px solid #334166;
     padding-bottom: 1rem;
-    letter-spacing: 2px;
-    /* Efecto de gradiente */
-    background: linear-gradient(90deg, var(--brand-red), #ff5e00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    letter-spacing: 1.5px;
+}
+h2 {
+    font-family: var(--font-heading);
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    letter-spacing: 1.5px;
+    background-color: #003d7f;
+    padding: 10px;
+    border-radius: 8px;
 }
 
 p {
@@ -93,20 +100,20 @@ p {
 
 .game-card {
     background-color: var(--card-color);
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     text-align: center;
-    /* Transición más suave y completa */
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    /* Transición suave */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* --- NUEVO EFECTO HOVER MÁS POTENTE --- */
+/* --- EFECTO HOVER SUTIL --- */
 .game-card:hover {
-    transform: translateY(-10px) scale(1.03);
-    box-shadow: 0 10px 30px var(--glow-color);
+    transform: translateY(-15px);
+    box-shadow: 0 8px 20px var(--glow-color);
 }
 
 .game-card img {
@@ -114,13 +121,13 @@ p {
     height: auto;
     aspect-ratio: 3 / 4;
     object-fit: cover;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid #334166;
     margin-bottom: 15px;
 }
 
 .game-card .game-title {
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 400; /* Un peso más ligero para un look más limpio */
     color: var(--font-color);
     padding: 0 10px 15px 10px;
 }
