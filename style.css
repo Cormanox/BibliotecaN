@@ -77,14 +77,24 @@
         padding: 0 10px;
     }
 
-    /* Media query opcional para ajustar detalles finos en móviles */
-    @media (max-width: 400px) {
-        body {
-            padding: 1rem; /* Aún menos padding en pantallas muy pequeñas */
-        }
-        .game-grid {
-            /* En pantallas muy estrechas, reducimos aún más el mínimo */
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 15px;
-        }
+/* Estilos para tablets y móviles (hasta 768px de ancho) */
+@media (max-width: 768px) {
+    body {
+        padding: 1rem; /* Menos padding en los lados */
     }
+
+    h1 {
+        font-size: 2rem; /* Título un poco más pequeño */
+    }
+
+    .game-grid {
+        /* Con un mínimo de 100px, cabrán 3 columnas en la mayoría de móviles */
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 15px; /* Un poco menos de espacio entre tarjetas */
+    }
+
+    .game-card .game-title {
+        font-size: 0.8rem; /* Títulos más pequeños para que no se corten */
+        padding: 0 5px;
+    }
+}
