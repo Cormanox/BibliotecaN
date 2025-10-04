@@ -33,9 +33,9 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
 
-    /* --- FONDO CON NUEVOS ÍCONOS DE D-PAD Y BOTONES ABXY --- */
+    /* --- FONDO CON PATRÓN --- */
     background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2399AAB520' stroke-width='1.5'%3E%3Cpath transform='translate(40, 40)' d='M20,0 h10 v20 h20 v10 h-20 v20 h-10 v-20 h-20 v-10 h20 z'/%3E%3Cg transform='translate(120, 120)'%3E%3Ccircle cx='25' cy='0' r='10'/%3E%3Ccircle cx='0' cy='25' r='10'/%3E%3Ccircle cx='50' cy='25' r='10'/%3E%3Ccircle cx='25' cy='50' r='10'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    background-size: 150px; /* Puedes ajustar el tamaño del patrón aquí */
+    background-size: 150px;
     background-attachment: fixed;
 }
 
@@ -109,7 +109,7 @@ h1 {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-emphasis-color: transparent;
+    text-fill-color: transparent;
     padding-bottom: 1rem;
     border-bottom: 2px solid #334166;
 }
@@ -212,16 +212,36 @@ h1, .search-form, .filter-container { animation: slideUpFadeIn 0.7s ease-out for
 @media (max-width: 1024px) {
     body { padding: 1rem; }
     .main-layout { flex-direction: column; position: relative; }
-    .container { padding-top: 140px; }
+    .container { padding-top: 120px; /* Aumentamos el padding para dar espacio */ }
     .selected-games-container { display: none; }
     .mobile-cart-trigger { display: block; }
     
-    .container > h1, .container .search-form { position: fixed; left: 0; width: 100%; background-color: var(--background-color); z-index: 500; margin: 0; padding: 1rem; box-sizing: border-box; }
-    .container > h1 { top: 0; border-bottom: none; padding-bottom: 0; font-size: 1.8rem; text-align: left; }
-    .container .search-form { top: 50px; padding-top: 0.5rem; border-bottom: 1px solid #334166; padding-bottom: 1rem; }
+    .container > h1, .container .search-form { 
+        position: fixed; 
+        left: 0;
+        width: 100%; 
+        background-color: var(--background-color); 
+        z-index: 500; 
+        margin: 0; 
+        padding: 0 1rem; /* Ajustamos padding horizontal */
+        box-sizing: border-box; 
+    }
+    .container > h1 { 
+        top: 1rem; /* Damos un poco de espacio arriba */
+        font-size: 2rem; 
+        text-align: center; /* Centramos el título */
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    .container .search-form { 
+        top: 70px; /* Bajamos el buscador para que no choque */
+        padding-top: 0.5rem; 
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #334166;
+    }
     .container p { margin-top: 0; }
     .container h2 { margin-top: 1rem; }
-    .filter-container { margin-top: 80px; }
+    .filter-container { margin-top: 0; }
 
     .game-grid {
         grid-template-columns: repeat(3, 1fr);
