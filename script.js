@@ -1,9 +1,14 @@
 window.addEventListener('load', function() {
-    // Lógica de Pop-ups
+    // Lógica de Pop-ups (CORREGIDA)
     const welcomePopup = document.getElementById('popup-overlay');
     const welcomeCloseBtn = document.getElementById('popup-close');
-    const welcomeCtaBtn = document.getElementById('popup-cta-btn'); 
-    if(welcomePopup) welcomePopup.style.display = 'flex';
+    const welcomeCtaBtn = document.getElementById('popup-cta-btn');
+    
+    // Se eliminó la lógica de sessionStorage para que el popup siempre aparezca al cargar.
+    if (welcomePopup) {
+        welcomePopup.style.display = 'flex';
+    }
+
     const closeWelcomePopup = () => { if(welcomePopup) welcomePopup.style.display = 'none'; };
     if(welcomeCloseBtn) welcomeCloseBtn.addEventListener('click', closeWelcomePopup);
     if(welcomeCtaBtn) welcomeCtaBtn.addEventListener('click', closeWelcomePopup);
@@ -24,7 +29,7 @@ window.addEventListener('load', function() {
     const addCustomGameBtn = document.getElementById('add-custom-game-btn');
     const whatsappLink = document.getElementById('whatsapp-link');
     const phoneNumber = '50660331197'; 
-    const selectedGames = new Set();
+    let selectedGames = new Set();
     
     // --- LÓGICA PARA EL CARRITO MÓVIL ---
     const mobileCartTrigger = document.getElementById('mobile-cart-trigger');
@@ -33,161 +38,26 @@ window.addEventListener('load', function() {
     const mobileSelectionCount = document.getElementById('mobile-selection-count');
     const mobileCartContent = document.querySelector('.mobile-cart-content');
     const mobileWhatsappLink = document.getElementById('mobile-whatsapp-link');
+    const mobileAddCustomGameBtn = document.getElementById('mobile-add-custom-game-btn');
+    const mobileClearCartBtn = document.getElementById('mobile-clear-cart-btn');
 
-    if (mobileCartTrigger) {
-        mobileCartTrigger.addEventListener('click', () => {
-            mobileCartContainer.classList.add('visible');
-        });
-    }
-    if (mobileCartClose) {
-        mobileCartClose.addEventListener('click', () => {
-            mobileCartContainer.classList.remove('visible');
-        });
-    }
+    if (mobileCartTrigger) mobileCartTrigger.addEventListener('click', () => mobileCartContainer.classList.add('visible'));
+    if (mobileCartClose) mobileCartClose.addEventListener('click', () => mobileCartContainer.classList.remove('visible'));
+    if (mobileClearCartBtn) mobileClearCartBtn.addEventListener('click', () => [...selectedGames].forEach(title => deselectGame(title)));
+    if (mobileAddCustomGameBtn) mobileAddCustomGameBtn.addEventListener('click', handleAddCustomGame);
 
     // --- LÓGICA DE BÚSQUEDA ---
     const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
+    if(searchForm) searchForm.addEventListener('submit', handleSearch);
 
-    if(searchForm) {
-        searchForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const query = searchInput.value.trim().toLowerCase();
-            if (query === '') return;
+    // --- LÓGICA DE FILTROS ---
+    const filterContainer = document.querySelector('.filter-container');
+    if (filterContainer) filterContainer.addEventListener('click', handleFilter);
 
-            let gameFound = false;
-            for (const card of gameCards) {
-                const gameTitle = card.querySelector('.game-title').innerText.toLowerCase();
-                if (gameTitle.includes(query)) {
-                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
-                    card.classList.add('highlight');
-                    setTimeout(() => {
-                        card.classList.remove('highlight');
-                    }, 2500);
+    // --- FUNCIONES PRINCIPALES ---
 
-                    gameFound = true;
-                    break; 
-                }
-            }
-
-            if (!gameFound) {
-                if(notFoundPopup) notFoundPopup.style.display = 'flex';
-            }
-            searchInput.value = '';
-        });
-    }
-
-    const findCardByTitle = (title) => {
-        for (const card of gameCards) {
-            if (card.querySelector('.game-title').innerHTML === title) return card;
-        }
-        return null;
-    };
-
-    const deselectGame = (gameTitle) => {
-        const card = findCardByTitle(gameTitle);
-        if (card) card.classList.remove('selected');
-        selectedGames.delete(gameTitle);
-        updateSelectionDisplay();
-    };
-
-    const updateSelectionDisplay = () => {
-        if (!selectedGamesList) return;
-        selectedGamesList.innerHTML = '';
-        const hasSelection = selectedGames.size > 0;
-        if(clearCartBtn) clearCartBtn.style.display = hasSelection ? 'block' : 'none';
-        if(whatsappLink) whatsappLink.style.display = hasSelection ? 'block' : 'none';
-
-        selectedGames.forEach(gameTitle => {
-            const listItem = document.createElement('li');
-            const isCustom = !findCardByTitle(gameTitle);
-            if (isCustom) listItem.classList.add('custom-game');
-
-            const titleSpan = document.createElement('span');
-            titleSpan.textContent = gameTitle.replace(/<br\s*\/?>/ig, ' ');
-            listItem.appendChild(titleSpan);
-
-            const removeBtn = document.createElement('button');
-            removeBtn.innerHTML = '&times;';
-            removeBtn.className = 'remove-game-btn';
-            removeBtn.title = 'Quitar juego';
-            removeBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                deselectGame(gameTitle);
-            });
-            listItem.appendChild(removeBtn);
-            selectedGamesList.appendChild(listItem);
-        });
-
-        if(hasSelection && whatsappLink) {
-            let message = '¡Hola! 👋 Quisiera consultar sobre estos juegos:\n\n';
-            let count = 1;
-            selectedGames.forEach(gameTitle => {
-                const cleanTitle = gameTitle.replace(/<br\s*\/?>/ig, ' ');
-                message += `*${count}.* ${cleanTitle}\n`;
-                count++;
-            });
-            message += '\n¡Gracias! 😊';
-            const encodedMessage = encodeURIComponent(message);
-            whatsappLink.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-        }
-
-        if(selectionCount) selectionCount.textContent = selectedGames.size;
-
-        // --- ACTUALIZACIÓN DE LA UI MÓVIL ---
-        if(mobileSelectionCount) mobileSelectionCount.textContent = selectedGames.size;
-        if(mobileCartContent) {
-            const ul = document.createElement('ul');
-            ul.innerHTML = selectedGamesList.innerHTML;
-            mobileCartContent.innerHTML = ''; // Limpiar contenido anterior
-            mobileCartContent.appendChild(ul);
-
-            // Re-asignar eventos a los botones de eliminar del carrito móvil
-            mobileCartContent.querySelectorAll('.remove-game-btn').forEach(btn => {
-                const title = btn.previousElementSibling.textContent;
-                // Encontrar el título original (con <br> si lo tuviera) para deseleccionar
-                const originalTitle = [...selectedGames].find(g => g.replace(/<br\s*\/?>/ig, ' ') === title);
-                if (originalTitle) {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        deselectGame(originalTitle);
-                    });
-                }
-            });
-        }
-        if (mobileWhatsappLink && whatsappLink) mobileWhatsappLink.href = whatsappLink.href;
-        
-        if (mobileCartTrigger) {
-            mobileCartTrigger.classList.toggle('visible', selectedGames.size > 0);
-            if (selectedGames.size === 0) {
-                mobileCartContainer.classList.remove('visible');
-            }
-        }
-    };
-
-    gameCards.forEach(card => {
-        card.addEventListener('click', () => {
-            const gameTitle = card.querySelector('.game-title').innerHTML;
-            if (selectedGames.has(gameTitle)) {
-                deselectGame(gameTitle);
-            } else {
-                if (selectedGames.size < maxSelection) {
-                    card.classList.add('selected');
-                    selectedGames.add(gameTitle);
-                    updateSelectionDisplay();
-                } else {
-                    alert('Puedes seleccionar un máximo de ' + maxSelection + ' juegos.');
-                }
-            }
-        });
-    });
-
-    if(clearCartBtn) clearCartBtn.addEventListener('click', () => {
-        [...selectedGames].forEach(title => deselectGame(title));
-    });
-    
-    if(addCustomGameBtn) addCustomGameBtn.addEventListener('click', () => {
+    function handleAddCustomGame() {
         if (selectedGames.size >= maxSelection) {
             alert('Has alcanzado el límite de ' + maxSelection + ' juegos.');
             return;
@@ -203,7 +73,161 @@ window.addEventListener('load', function() {
                 updateSelectionDisplay();
             }
         }
-    });
+    }
 
-    updateSelectionDisplay(); // Llamada inicial para establecer el estado correcto
+    function handleSearch(event) {
+        event.preventDefault();
+        const query = searchInput.value.trim().toLowerCase();
+        if (query === '') return;
+        let gameFound = false;
+        gameCards.forEach(card => {
+            const gameTitle = card.querySelector('.game-title').innerText.toLowerCase();
+            if (gameTitle.includes(query) && !gameFound) {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                card.classList.add('highlight');
+                setTimeout(() => card.classList.remove('highlight'), 2500);
+                gameFound = true;
+            }
+        });
+        if (!gameFound) notFoundPopup.style.display = 'flex';
+        searchInput.value = '';
+    }
+    
+function handleFilter(event) {
+        const target = event.target;
+        if (!target.classList.contains('filter-btn')) return;
+
+        filterContainer.querySelector('.active').classList.remove('active');
+        target.classList.add('active');
+
+        const filterValue = target.dataset.filter;
+
+        gameCards.forEach(card => {
+            const cardCategory = card.dataset.category;
+            const shouldShow = filterValue === 'all' || filterValue === cardCategory;
+
+            if (shouldShow) {
+                // Para mostrar: primero quitamos la clase hide y luego la hacemos visible
+                card.classList.remove('hide');
+                card.style.display = 'flex';
+            } else {
+                // Para ocultar: aplicamos la animación y luego la ocultamos del todo
+                card.classList.add('hide');
+                // Esperamos a que la animación de opacidad/transformación termine
+                setTimeout(() => {
+                    card.style.display = 'none';
+                }, 400); // 400ms, igual que la duración de la transición en CSS
+            }
+        });
+    }
+
+    const findCardByTitle = (title) => [...gameCards].find(card => card.querySelector('.game-title').innerHTML === title);
+
+    const deselectGame = (gameTitle) => {
+        const card = findCardByTitle(gameTitle);
+        if (card) card.classList.remove('selected');
+        selectedGames.delete(gameTitle);
+        updateSelectionDisplay();
+    };
+
+    function updateSelectionDisplay() {
+        if (!selectedGamesList) return;
+        selectedGamesList.innerHTML = '';
+        const hasSelection = selectedGames.size > 0;
+        
+        // Actualizar visibilidad de botones
+        if(clearCartBtn) clearCartBtn.style.display = hasSelection ? 'block' : 'none';
+        if(whatsappLink) whatsappLink.style.display = hasSelection ? 'block' : 'none';
+        if(mobileClearCartBtn) mobileClearCartBtn.style.display = hasSelection ? 'block' : 'none';
+
+        if (!hasSelection) {
+            const emptyMessage = `<li class="empty-cart-message">🛒<br>¡Tu selección está vacía!</li>`;
+            selectedGamesList.innerHTML = emptyMessage;
+            if(mobileCartContent) mobileCartContent.innerHTML = `<ul>${emptyMessage}</ul>`;
+        } else {
+            selectedGames.forEach(gameTitle => {
+                const listItem = document.createElement('li');
+                if (!findCardByTitle(gameTitle)) listItem.classList.add('custom-game');
+                const titleSpan = document.createElement('span');
+                titleSpan.textContent = gameTitle.replace(/<br\s*\/?>/ig, ' ');
+                listItem.appendChild(titleSpan);
+                const removeBtn = document.createElement('button');
+                removeBtn.innerHTML = '&times;';
+                removeBtn.className = 'remove-game-btn';
+                removeBtn.title = 'Quitar juego';
+                removeBtn.onclick = (e) => { e.stopPropagation(); deselectGame(gameTitle); };
+                listItem.appendChild(removeBtn);
+                selectedGamesList.appendChild(listItem);
+            });
+             if(mobileCartContent) mobileCartContent.innerHTML = `<ul>${selectedGamesList.innerHTML}</ul>`;
+        }
+
+        if(hasSelection) {
+            let message = '¡Hola! 👋 Quisiera consultar sobre estos juegos:\n\n';
+            [...selectedGames].forEach((gameTitle, index) => {
+                const cleanTitle = gameTitle.replace(/<br\s*\/?>/ig, ' ');
+                message += `*${index + 1}.* ${cleanTitle}\n`;
+            });
+            message += '\n¡Gracias! 😊';
+            const encodedMessage = encodeURIComponent(message);
+            const href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+            if (whatsappLink) whatsappLink.href = href;
+            if (mobileWhatsappLink) mobileWhatsappLink.href = href;
+        }
+
+        if(selectionCount) selectionCount.textContent = selectedGames.size;
+        if(mobileSelectionCount) mobileSelectionCount.textContent = selectedGames.size;
+        if (mobileCartTrigger) mobileCartTrigger.classList.toggle('visible', hasSelection);
+        if (!hasSelection) mobileCartContainer.classList.remove('visible');
+
+        saveSelectionToStorage();
+    };
+
+    function handleCardClick(gameTitle) {
+        if (selectedGames.has(gameTitle)) {
+            deselectGame(gameTitle);
+        } else {
+            if (selectedGames.size < maxSelection) {
+                const card = findCardByTitle(gameTitle);
+                if (card) card.classList.add('selected');
+                selectedGames.add(gameTitle);
+                updateSelectionDisplay();
+            } else {
+                alert('Puedes seleccionar un máximo de ' + maxSelection + ' juegos.');
+            }
+        }
+    }
+
+    gameCards.forEach(card => card.addEventListener('click', () => handleCardClick(card.querySelector('.game-title').innerHTML)));
+    if(clearCartBtn) clearCartBtn.addEventListener('click', () => [...selectedGames].forEach(title => deselectGame(title)));
+    if(addCustomGameBtn) addCustomGameBtn.addEventListener('click', handleAddCustomGame);
+
+    // --- NUEVAS FUNCIONES DE INICIALIZACIÓN ---
+
+    function saveSelectionToStorage() {
+        localStorage.setItem('juegosSeleccionados', JSON.stringify([...selectedGames]));
+    }
+
+    function loadSelectionFromStorage() {
+        const juegosGuardados = JSON.parse(localStorage.getItem('juegosSeleccionados'));
+        if (juegosGuardados && Array.isArray(juegosGuardados)) {
+            selectedGames = new Set(juegosGuardados);
+            selectedGames.forEach(gameTitle => {
+                const card = findCardByTitle(gameTitle);
+                if (card) card.classList.add('selected');
+            });
+        }
+    }
+
+    function animateCardsOnLoad() {
+        gameCards.forEach((card, index) => {
+            card.style.animation = `slideUpFadeIn 0.5s ease-out forwards`;
+            card.style.animationDelay = `${index * 0.04}s`;
+        });
+    }
+
+    // --- INICIALIZACIÓN ---
+    loadSelectionFromStorage();
+    updateSelectionDisplay();
+    animateCardsOnLoad();
 });
