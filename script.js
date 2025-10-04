@@ -1,14 +1,11 @@
 window.addEventListener('load', function() {
-    // Lógica de Pop-ups (CORREGIDA)
+    // Lógica de Pop-ups
     const welcomePopup = document.getElementById('popup-overlay');
     const welcomeCloseBtn = document.getElementById('popup-close');
     const welcomeCtaBtn = document.getElementById('popup-cta-btn');
-    
-    // Se eliminó la lógica de sessionStorage para que el popup siempre aparezca al cargar.
     if (welcomePopup) {
         welcomePopup.style.display = 'flex';
     }
-
     const closeWelcomePopup = () => { if(welcomePopup) welcomePopup.style.display = 'none'; };
     if(welcomeCloseBtn) welcomeCloseBtn.addEventListener('click', closeWelcomePopup);
     if(welcomeCtaBtn) welcomeCtaBtn.addEventListener('click', closeWelcomePopup);
@@ -56,7 +53,6 @@ window.addEventListener('load', function() {
     if (filterContainer) filterContainer.addEventListener('click', handleFilter);
 
     // --- FUNCIONES PRINCIPALES ---
-
     function handleAddCustomGame() {
         if (selectedGames.size >= maxSelection) {
             alert('Has alcanzado el límite de ' + maxSelection + ' juegos.');
@@ -93,7 +89,8 @@ window.addEventListener('load', function() {
         searchInput.value = '';
     }
     
-function handleFilter(event) {
+    // ******** NUEVA FUNCIÓN DE FILTRADO ********
+    function handleFilter(event) {
         const target = event.target;
         if (!target.classList.contains('filter-btn')) return;
 
@@ -105,18 +102,14 @@ function handleFilter(event) {
         gameCards.forEach(card => {
             const cardCategory = card.dataset.category;
             const shouldShow = filterValue === 'all' || filterValue === cardCategory;
-
+            
+            // Lógica de animación y visualización
             if (shouldShow) {
-                // Para mostrar: primero quitamos la clase hide y luego la hacemos visible
-                card.classList.remove('hide');
-                card.style.display = 'flex';
+                // Para mostrar: simplemente quitamos 'hide'
+                 card.classList.remove('hide');
             } else {
-                // Para ocultar: aplicamos la animación y luego la ocultamos del todo
+                // Para ocultar: añadimos 'hide'
                 card.classList.add('hide');
-                // Esperamos a que la animación de opacidad/transformación termine
-                setTimeout(() => {
-                    card.style.display = 'none';
-                }, 400); // 400ms, igual que la duración de la transición en CSS
             }
         });
     }
@@ -135,7 +128,6 @@ function handleFilter(event) {
         selectedGamesList.innerHTML = '';
         const hasSelection = selectedGames.size > 0;
         
-        // Actualizar visibilidad de botones
         if(clearCartBtn) clearCartBtn.style.display = hasSelection ? 'block' : 'none';
         if(whatsappLink) whatsappLink.style.display = hasSelection ? 'block' : 'none';
         if(mobileClearCartBtn) mobileClearCartBtn.style.display = hasSelection ? 'block' : 'none';
@@ -202,8 +194,6 @@ function handleFilter(event) {
     if(clearCartBtn) clearCartBtn.addEventListener('click', () => [...selectedGames].forEach(title => deselectGame(title)));
     if(addCustomGameBtn) addCustomGameBtn.addEventListener('click', handleAddCustomGame);
 
-    // --- NUEVAS FUNCIONES DE INICIALIZACIÓN ---
-
     function saveSelectionToStorage() {
         localStorage.setItem('juegosSeleccionados', JSON.stringify([...selectedGames]));
     }
@@ -226,7 +216,6 @@ function handleFilter(event) {
         });
     }
 
-    // --- INICIALIZACIÓN ---
     loadSelectionFromStorage();
     updateSelectionDisplay();
     animateCardsOnLoad();
