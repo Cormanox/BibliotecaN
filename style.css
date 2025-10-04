@@ -8,8 +8,8 @@
     --card-color: #1B253F;
     --font-color: #EAEAEA;
     --font-secondary: #99AAB5;
-    --font-heading: 'Orbitron', sans-serif; /* <-- Nueva fuente */
-    --font-body: 'Poppins', sans-serif;    /* <-- Nueva fuente */
+    --font-heading: 'Russo One', sans-serif;
+    --font-body: 'Nunito', sans-serif;
     --danger-red: #ff4d4d;
     --danger-red-hover: #e60000;
     --custom-orange: #E67E22;
@@ -32,6 +32,11 @@ body {
     padding: 1.5rem;
     line-height: 1.6;
     overflow-x: hidden;
+
+    /* --- FONDO CON NUEVOS ÍCONOS DE D-PAD Y BOTONES ABXY --- */
+    background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%2399AAB520' stroke-width='1.5'%3E%3Cpath transform='translate(40, 40)' d='M20,0 h10 v20 h20 v10 h-20 v20 h-10 v-20 h-20 v-10 h20 z'/%3E%3Cg transform='translate(120, 120)'%3E%3Ccircle cx='25' cy='0' r='10'/%3E%3Ccircle cx='0' cy='25' r='10'/%3E%3Ccircle cx='50' cy='25' r='10'/%3E%3Ccircle cx='25' cy='50' r='10'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-size: 150px; /* Puedes ajustar el tamaño del patrón aquí */
+    background-attachment: fixed;
 }
 
 /* --- LAYOUT PRINCIPAL --- */
@@ -77,6 +82,7 @@ body {
 .cart-actions { margin-top: 1rem; display: grid; gap: 0.5rem; }
 .custom-game-btn, .clear-cart-btn, .whatsapp-btn, .search-btn, .popup-cta-btn, .filter-btn {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s, transform 0.1s ease;
+    font-weight: 700;
 }
 .custom-game-btn:active, .clear-cart-btn:active, .whatsapp-btn:active, .search-btn:active, .popup-cta-btn:active, .filter-btn:active {
     transform: scale(0.97);
@@ -99,12 +105,11 @@ h1 {
     font-size: 3.2rem;
     margin-bottom: 0.5rem;
     letter-spacing: 1.5px;
-    /* Nuevo estilo de gradiente para el título */
     background: var(--title-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
+    text-emphasis-color: transparent;
     padding-bottom: 1rem;
     border-bottom: 2px solid #334166;
 }
@@ -121,7 +126,7 @@ h3 { font-family: var(--font-heading); color: #FFFFFF; margin-bottom: 1rem; font
 
 /* --- FILTROS DE CATEGORÍA --- */
 .filter-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 2.5rem; }
-.filter-btn { background-color: var(--card-color); color: var(--font-secondary); border: 1px solid #334166; padding: 8px 18px; border-radius: 20px; font-family: var(--font-heading); cursor: pointer; }
+.filter-btn { background-color: var(--card-color); color: var(--font-secondary); border: 1px solid #334166; padding: 8px 18px; border-radius: 20px; font-family: var(--font-body); cursor: pointer; }
 .filter-btn:hover { color: white; border-color: var(--brand-blue); }
 .filter-btn.active { background: var(--brand-blue-gradient); color: white; border-color: transparent; }
 
@@ -219,13 +224,11 @@ h1, .search-form, .filter-container { animation: slideUpFadeIn 0.7s ease-out for
     .filter-container { margin-top: 80px; }
 
     .game-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
     }
-    .game-card .game-title { font-size: 0.9rem; }
-}
-
-@media (max-width: 768px) {
-    h1 { font-size: 2.2rem; }
-    .game-card .game-title { font-size: 0.8rem; padding: 0 5px 10px 5px; }
+    .game-card .game-title {
+        font-size: 0.75rem;
+        padding: 0 5px 10px 5px;
+    }
 }
